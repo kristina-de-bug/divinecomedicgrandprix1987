@@ -1,7 +1,5 @@
-// Get the video element
 const videoPlayer = document.getElementById("video-player");
 
-// List of videos
 const videos = [
     "videos/video1.mp4",
     "videos/video2.mp4",
@@ -15,50 +13,31 @@ const videos = [
     "videos/video10.mp4"
 ];
 
-// Current video index
 let currentVideo = 0;
 
-// Buttons
 const backButton = document.getElementById("back-button");
 const forwardButton = document.getElementById("forward-button");
 
-
-// FUNCTION:
-// Load a video using its index
 function loadVideo(index) {
-
     videoPlayer.src = videos[index];
-
     videoPlayer.play();
-
 }
 
-
-// FORWARD BUTTON
-forwardButton.addEventListener("click", () => {
-
-    currentVideo++;
-
-    // If past last video, go back to first
-    if (currentVideo >= videos.length) {
-        currentVideo = 0;
-    }
-
+function handleForward(e) {
+    e.preventDefault();
+    currentVideo = (currentVideo + 1) % videos.length;
     loadVideo(currentVideo);
+}
 
-});
-
-
-// BACK BUTTON
-backButton.addEventListener("click", () => {
-
-    currentVideo--;
-
-    // If before first video, go to last
-    if (currentVideo < 0) {
-        currentVideo = videos.length - 1;
-    }
-
+function handleBack(e) {
+    e.preventDefault();
+    currentVideo = (currentVideo - 1 + videos.length) % videos.length;
     loadVideo(currentVideo);
+}
 
-});
+// Register both touch and click for maximum compatibility
+forwardButton.addEventListener("touchend", handleForward, { passive: false });
+forwardButton.addEventListener("click", handleForward);
+
+backButton.addEventListener("touchend", handleBack, { passive: false });
+backButton.addEventListener("click", handleBack);
